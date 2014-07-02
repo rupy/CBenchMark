@@ -18,6 +18,8 @@ long benchmarkFloatAdd();
 long benchmarkFloatSub();
 long benchmarkFloatMul();
 long benchmarkFloatDiv();
+long benchmarkCallFunc();
+int emptyFunc();
 
 int main(int argc, const char * argv[])
 {
@@ -78,7 +80,12 @@ int main(int argc, const char * argv[])
     }
     printf("浮動小数点除算：%f(ms)\n", time_average);
 
-
+    // 関数呼び出し
+    time_average = 0;
+    for(int i = 0; i < BENCHMARK_TIMES; ++i){
+        time_average += (double) benchmarkCallFunc() / BENCHMARK_TIMES;
+    }
+    printf("関数呼び出し：%f(ms)\n", time_average);
 
 }
 
@@ -227,4 +234,28 @@ long benchmarkFloatDiv(){
     }
     end_time = clock();
     return (end_time - start_time);
+}
+
+/**
+ * 関数呼び出しのベンチマーク
+ * @return 計測時間(ms)
+ */
+long benchmarkCallFunc(){
+    long start_time, end_time;
+    float a = 1;
+    
+    start_time = clock();
+    for(long i = 1; i < BENCHMARK_SIZE + 1; ++i){ // 0除算を避ける
+        emptyFunc();
+    }
+    end_time = clock();
+    return (end_time - start_time);
+}
+
+/**
+ * 空の関数
+ * @return 1
+ */
+int emptyFunc(){
+   return 1 ;
 }
